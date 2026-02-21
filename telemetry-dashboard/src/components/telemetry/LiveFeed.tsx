@@ -1,16 +1,25 @@
 'use client';
 
 import { Terminal, Activity } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export default function LiveFeed({ activity = [] }: { activity: any[] }) {
     const scrollRef = useRef<HTMLDivElement>(null);
+    const [isAutoScrollLocked, setIsAutoScrollLocked] = useState(true);
+
+    const handleScroll = () => {
+        if (!scrollRef.current) return;
+        const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
+        // If we are within 50px of the bottom, keep auto-scroll locked ON
+        const isAtBottom = scrollHeight - scrollTop - clientHeight < 50;
+        setIsAutoScrollLocked(isAtBottom);
+    };
 
     useEffect(() => {
-        if (scrollRef.current) {
+        if (scrollRef.current && isAutoScrollLocked) {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
         }
-    }, [activity]);
+    }, [activity, isAutoScrollLocked]);
 
     return (
         <div className="flex flex-col h-full bg-zinc-950 border border-zinc-800/50 rounded-xl overflow-hidden shadow-2xl relative group">
@@ -32,6 +41,7 @@ export default function LiveFeed({ activity = [] }: { activity: any[] }) {
             {/* Scrolling body */}
             <div
                 ref={scrollRef}
+                onScroll={handleScroll}
                 className="flex-1 overflow-y-auto pt-16 pb-4 px-4 space-y-3 font-mono text-xs text-zinc-400 no-scrollbar"
             >
                 {activity.length === 0 ? (

@@ -1,12 +1,14 @@
 'use client';
 
-import { ListTodo, CheckCircle2, CircleDashed } from 'lucide-react';
+import { useState } from 'react';
+import { ListTodo, CheckCircle2, CircleDashed, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface TaskTrackerProps {
     conversation: any;
 }
 
 export default function TaskTracker({ conversation }: TaskTrackerProps) {
+    const [isExpanded, setIsExpanded] = useState(false);
     const rawTask = conversation?.rawTask || '';
 
     // Very rough parsing of the task.md artifact
@@ -55,9 +57,11 @@ export default function TaskTracker({ conversation }: TaskTrackerProps) {
                 </div>
             </div>
 
-            <div className="mt-8 space-y-3">
-                <h3 className="text-xs text-zinc-500 uppercase tracking-widest font-semibold mb-4">Current Vector</h3>
-                {allTasks.slice(0, 3).map((task: string, i: number) => {
+            <div className={`mt-8 space-y-3 ${isExpanded ? 'overflow-y-auto max-h-[300px] pr-2 no-scrollbar' : ''}`}>
+                <h3 className="text-xs text-zinc-500 uppercase tracking-widest font-semibold mb-4 sticky top-0 bg-zinc-950 pb-2 z-10">
+                    Current Vector
+                </h3>
+                {(isExpanded ? allTasks : allTasks.slice(0, 3)).map((task: string, i: number) => {
                     const isDone = task.includes('[x]');
                     const isDoing = task.includes('[/]');
                     const cleanText = task.replace(/\[[ \/x]\]/g, '').trim().replace(/`/g, '');
@@ -78,7 +82,22 @@ export default function TaskTracker({ conversation }: TaskTrackerProps) {
                     );
                 })}
                 {allTasks.length > 3 && (
-                    <div className="text-xs text-zinc-600 font-mono mt-2 ml-7 italic">... {allTasks.length - 3} more subroutines</div>
+                    <button
+                        onClick={() => setIsExpanded(!isExpanded)}
+                        className="flex items-center gap-1 text-xs text-zinc-500 hover:text-blue-400 font-mono mt-3 ml-7 transition-colors group"
+                    >
+                        {isExpanded ? (
+                            <>
+                                <ChevronUp className="w-3 h-3 group-hover:-translate-y-0.5 transition-transform" />
+                                Collapse subroutines
+                            </>
+                        ) : (
+                            <>
+                                <ChevronDown className="w-3 h-3 group-hover:translate-y-0.5 transition-transform" />
+                                ... {allTasks.length - 3} more subroutines
+                            </>
+                        )}
+                    </button>
                 )}
             </div>
         </div>
