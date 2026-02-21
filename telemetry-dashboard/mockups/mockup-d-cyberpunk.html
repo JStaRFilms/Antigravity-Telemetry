@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mockup D — Cyberpunk Neon</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #050510;
+            /* Using a slightly darker bg for grid to contrast */
+            --cyan: #00FFFF;
+            --purple: #7B61FF;
+            --magenta: #FF00FF;
+            --text: #E0E0FF;
+            --card-bg: rgba(20, 20, 40, 0.7);
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Fira Code', monospace;
+            padding: 40px;
+            min-height: 100vh;
+            background-image: linear-gradient(rgba(0, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        /* Glitch effect on header */
+        header {
+            margin-bottom: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        header h1 {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--text);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+        }
+
+        header h1::before,
+        header h1::after {
+            content: 'META_TELEMETRY';
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0.8;
+        }
+
+        header h1::before {
+            color: var(--cyan);
+            transform: translate(-2px, 2px);
+            z-index: -1;
+        }
+
+        header h1::after {
+            color: var(--magenta);
+            transform: translate(2px, -2px);
+            z-index: -2;
+        }
+
+        .badge {
+            border: 1px solid var(--cyan);
+            color: var(--cyan);
+            padding: 8px 16px;
+            font-size: 14px;
+            text-transform: uppercase;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.2), inset 0 0 10px rgba(0, 255, 255, 0.2);
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: auto auto;
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--purple);
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .card:hover {
+            border-color: var(--cyan);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        /* decorative corners */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 10px;
+            height: 10px;
+            border-top: 2px solid var(--cyan);
+            border-left: 2px solid var(--cyan);
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 10px;
+            height: 10px;
+            border-bottom: 2px solid var(--magenta);
+            border-right: 2px solid var(--magenta);
+        }
+
+        .card.large {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+
+        .card .label {
+            font-size: 12px;
+            color: var(--cyan);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+
+        .card .value {
+            font-size: 56px;
+            font-weight: 700;
+            color: #FFF;
+            line-height: 1;
+            margin-bottom: 12px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        .card .sub {
+            font-size: 13px;
+            color: #8888AA;
+        }
+
+        /* Horizontal track */
+        .track-wrapper {
+            overflow-x: auto;
+            padding-bottom: 20px;
+        }
+
+        .track {
+            display: flex;
+            gap: 20px;
+            width: max-content;
+        }
+
+        .track-card {
+            background: rgba(123, 97, 255, 0.1);
+            border-left: 3px solid var(--magenta);
+            padding: 20px;
+            width: 300px;
+        }
+
+        .track-card .ts {
+            color: var(--purple);
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .track-card .title {
+            font-size: 16px;
+            color: #FFF;
+            margin-bottom: 4px;
+        }
+
+        .track-card .type {
+            font-size: 11px;
+            color: var(--magenta);
+            text-transform: uppercase;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+            border: 1px solid var(--purple);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--cyan);
+        }
+
+        .footer-timeline {
+            margin-top: 40px;
+            border: 1px solid var(--cyan);
+            padding: 30px;
+            background: repeating-linear-gradient(45deg, rgba(0, 255, 255, 0.05), rgba(0, 255, 255, 0.05) 10px, transparent 10px, transparent 20px);
+        }
+
+        .footer-timeline h2 {
+            color: var(--cyan);
+            font-size: 18px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>META_TELEMETRY</h1>
+        <div class="badge">SYS.SYNC: ONLINE</div>
+    </header>
+
+    <div class="bento-grid">
+        <div class="card large">
+            <div class="label">// Artifact Construction Ratio</div>
+            <div style="height: 200px; display: flex; align-items: flex-end; gap: 20px; margin-top: 40px;">
+                <div style="flex:1; background: var(--cyan); height: 100%; position: relative;">
+                    <span style="position:absolute; top:-25px; color:#fff;">61 TSKS</span>
+                </div>
+                <div style="flex:1; background: var(--purple); height: 60%; position: relative;">
+                    <span style="position:absolute; top:-25px; color:#fff;">36 PLNS</span>
+                </div>
+                <div style="flex:1; background: var(--magenta); height: 45%; position: relative;">
+                    <span style="position:absolute; top:-25px; color:#fff;">28 WLKS</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="label">Vol. Sessions</div>
+            <div class="value">100</div>
+            <div class="sub">103.88 MB Allocated</div>
+        </div>
+        <div class="card">
+            <div class="label">Code Impact (Δ)</div>
+            <div class="value">117</div>
+            <div class="sub">7 Active Nodes</div>
+        </div>
+        <div class="card">
+            <div class="label">Vis. Checks</div>
+            <div class="value">21</div>
+            <div class="sub">Recordings Cached</div>
+        </div>
+        <div class="card">
+            <div class="label">Peak Cycles</div>
+            <div class="value">0</div>
+            <div class="sub">Max Focus (min)</div>
+        </div>
+    </div>
+
+    <div
+        style="margin-bottom: 20px; color: var(--magenta); text-transform: uppercase; font-size: 14px; letter-spacing: 2px;">
+        > Activity Stream Log</div>
+    <div class="track-wrapper">
+        <div class="track">
+            <div class="track-card">
+                <div class="ts">00:23:14:55</div>
+                <div class="title">Session f1c7724d</div>
+                <div class="type">[SESSION_INIT]</div>
+            </div>
+            <div class="track-card">
+                <div class="ts">00:21:05:12</div>
+                <div class="title">Session 27348e08</div>
+                <div class="type">[SESSION_INIT]</div>
+            </div>
+            <div class="track-card" style="border-left-color: var(--cyan);">
+                <div class="ts">00:17:42:01</div>
+                <div class="title">JengoArch.../page.tsx</div>
+                <div class="type" style="color: var(--cyan);">[FILE_MUTATION]</div>
+            </div>
+            <div class="track-card">
+                <div class="ts">00:16:11:33</div>
+                <div class="title">Session 23dffb85</div>
+                <div class="type">[SESSION_INIT]</div>
+            </div>
+            <div class="track-card" style="border-left-color: var(--cyan);">
+                <div class="ts">23:55:09:88</div>
+                <div class="title">analytics.html</div>
+                <div class="type" style="color: var(--cyan);">[FILE_MUTATION]</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-timeline">
+        <h2>[SQLite_Timeline_Projection]</h2>
+        <div
+            style="height: 60px; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.5);">
+            AWAITING DB HYDRATION...</div>
+    </div>
+</body>
+
+</html>

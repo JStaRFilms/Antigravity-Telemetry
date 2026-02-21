@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import { insertSnapshot } from '@/lib/db';
 
 // Safely resolve the root directory without hardcoding the exact path if possible, 
 // but since this is a local tool specifically for this user's machine:
@@ -17,11 +18,20 @@ export async function GET() {
             recentActivity: [] as { type: string, name: string, date: string }[]
         };
 
-        // 1. Conversations
+        // 1. Conversations (Size and Longest Session still from .pb, Count from brain/)
         const convDir = path.join(ROOT, 'conversations');
+        const brainDir = path.join(ROOT, 'brain');
+
+        if (fs.existsSync(brainDir)) {
+            const brainFolders = fs.readdirSync(brainDir).filter(f => {
+                const stat = fs.statSync(path.join(brainDir, f));
+                return stat.isDirectory() && !f.startsWith('.');
+            });
+            summary.conversations.count = brainFolders.length;
+        }
+
         if (fs.existsSync(convDir)) {
             const files = fs.readdirSync(convDir).filter(f => f.endsWith('.pb'));
-            summary.conversations.count = files.length;
 
             files.forEach(f => {
                 const stat = fs.statSync(path.join(convDir, f));
@@ -60,7 +70,7 @@ export async function GET() {
                         if (Date.now() - stat.mtimeMs < 7 * 24 * 60 * 60 * 1000) {
                             summary.recentActivity.push({
                                 type: 'Code Edit',
-                                name: `${p.substring(0, 15)}.../${f.substring(33, 45)}...`, // Truncated for UI
+                                name: `${p}/${f}`, // Full project/filename instead of truncated
                                 date: stat.mtime.toISOString()
                             })
                         }
@@ -77,7 +87,6 @@ export async function GET() {
         }
 
         // 4. Brain Artifacts
-        const brainDir = path.join(ROOT, 'brain');
         if (fs.existsSync(brainDir)) {
             const sessions = fs.readdirSync(brainDir);
             sessions.forEach(s => {
@@ -98,6 +107,23 @@ export async function GET() {
         // Round MB
         summary.conversations.totalSizeInMB = Math.round(summary.conversations.totalSizeInMB * 100) / 100;
         summary.conversations.longestSessionMinutes = Math.round(summary.conversations.longestSessionMinutes * 10) / 10;
+
+        // Persist snapshot to SQLite for timeline tracking
+        try {
+            insertSnapshot({
+                sessions: summary.conversations.count,
+                totalSizeMB: summary.conversations.totalSizeInMB,
+                trackedEdits: summary.trackedFileEdits,
+                projects: summary.projectsTracked,
+                recordings: summary.browserRecordings,
+                tasks: summary.artifactsGenerated.tasks,
+                plans: summary.artifactsGenerated.plans,
+                walkthroughs: summary.artifactsGenerated.walkthroughs,
+                longestSessionMin: summary.conversations.longestSessionMinutes,
+            });
+        } catch (dbErr) {
+            console.warn('Snapshot insert failed:', dbErr);
+        }
 
         return NextResponse.json(summary);
     } catch (error) {

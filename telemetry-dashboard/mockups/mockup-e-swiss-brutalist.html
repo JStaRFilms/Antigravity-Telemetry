@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mockup E — Swiss Minimalist</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --primary: #3B82F6;
+            --cta: #F97316;
+            --bg: #F8FAFC;
+            --text: #1E293B;
+            --text-light: #64748B;
+            --border: #E2E8F0;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            padding: 4rem 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        header {
+            border-bottom: 2px solid var(--text);
+            padding-bottom: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.05em;
+            color: var(--text);
+        }
+
+        header p {
+            font-size: 1.125rem;
+            color: var(--text-light);
+            margin-top: 0.5rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .stat {
+            grid-column: span 3;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        @media (max-width: 768px) {
+            .stat {
+                grid-column: span 6;
+            }
+        }
+
+        .stat h2 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat .val {
+            font-size: 3.5rem;
+            font-weight: 300;
+            letter-spacing: -0.05em;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .stat .desc {
+            font-size: 0.875rem;
+            color: var(--text-light);
+        }
+
+        .section {
+            grid-column: span 12;
+            margin-top: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+        }
+
+        .ratio-bar {
+            display: flex;
+            height: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .ratio-bar .segment {
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .ratio-bar .tasks {
+            background: var(--primary);
+            width: 48%;
+        }
+
+        .ratio-bar .plans {
+            background: #60A5FA;
+            width: 30%;
+        }
+
+        .ratio-bar .walks {
+            background: #93C5FD;
+            width: 22%;
+        }
+
+        .legend {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.875rem;
+            color: var(--text-light);
+        }
+
+        .legend strong {
+            color: var(--text);
+        }
+
+        .list {
+            margin-top: 4rem;
+        }
+
+        .list-item {
+            display: grid;
+            grid-template-columns: 100px 100px 1fr;
+            gap: 2rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.875rem;
+        }
+
+        .list-item .time {
+            color: var(--text-light);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .list-item .type {
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--primary);
+        }
+
+        .list-item.edit .type {
+            color: var(--cta);
+        }
+
+        .list-item .desc {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .timeline {
+            margin-top: 4rem;
+            padding: 3rem;
+            background: #FFF;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .timeline h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .timeline p {
+            color: var(--text-light);
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Meta-Telemetry.</h1>
+        <p>File-system heuristics & performance tracking / Live Sync</p>
+    </header>
+
+    <div class="grid">
+        <div class="stat">
+            <h2>Sessions</h2>
+            <div class="val">100</div>
+            <div class="desc">103.88 MB Footprint</div>
+        </div>
+        <div class="stat">
+            <h2>Impact</h2>
+            <div class="val">117</div>
+            <div class="desc">7 Active Projects</div>
+        </div>
+        <div class="stat">
+            <h2>Vis UI</h2>
+            <div class="val">21</div>
+            <div class="desc">WebP Recordings</div>
+        </div>
+        <div class="stat">
+            <h2>Focus</h2>
+            <div class="val">0</div>
+            <div class="desc">Peak Minutes</div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Artifact Distribution</h2>
+            <div class="ratio-bar">
+                <div class="segment tasks"></div>
+                <div class="segment plans"></div>
+                <div class="segment walks"></div>
+            </div>
+            <div class="legend">
+                <div>Tasks: <strong>61</strong></div>
+                <div>Plans: <strong>36</strong></div>
+                <div>Walkthroughs: <strong>28</strong></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="list">
+        <h2 class="section-title">Activity Feed</h2>
+        <div class="list-item">
+            <div class="time">00:23</div>
+            <div class="type">Session</div>
+            <div class="desc">f1c7724d</div>
+        </div>
+        <div class="list-item">
+            <div class="time">00:21</div>
+            <div class="type">Session</div>
+            <div class="desc">27348e08</div>
+        </div>
+        <div class="list-item edit">
+            <div class="time">00:17</div>
+            <div class="type">Edit</div>
+            <div class="desc">JengoArchitect/page.tsx</div>
+        </div>
+        <div class="list-item">
+            <div class="time">00:16</div>
+            <div class="type">Session</div>
+            <div class="desc">23dffb85</div>
+        </div>
+        <div class="list-item edit">
+            <div class="time">23:55</div>
+            <div class="type">Edit</div>
+            <div class="desc">analytics.html</div>
+        </div>
+    </div>
+
+    <div class="timeline">
+        <h3>Historical Timeline</h3>
+        <p>Data will populate via SQLite snapshot records here.</p>
+    </div>
+</body>
+
+</html>
